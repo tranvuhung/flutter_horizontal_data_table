@@ -43,16 +43,21 @@ class HorizontalDataTable extends StatefulWidget {
   final Color leftHandSideColBackgroundColor;
   final Color rightHandSideColBackgroundColor;
 
-  const HorizontalDataTable({
-    @required this.leftHandSideColumnWidth,
-    @required this.rightHandSideColumnWidth,
-    this.isFixedHeader = false,
-    this.headerWidgets,
-    this.leftSideItemBuilder,
-    this.rightSideItemBuilder,
-    this.itemCount = 0,
-    this.leftSideChildren,
-    this.rightSideChildren,
+  ///
+  ///(dev) added ScrollbarStyle for the Scrollbar widget. ScrollbarStyle contains isAlwaysShown, radius and thickness options which are the same setting as the original Scrollbar widget. Default the isAlwaysShown is turned off.
+  ///Not fully tested on different platform yet.
+  final ScrollbarStyle scrollbarStyle;
+
+  const HorizontalDataTable(
+      {@required this.leftHandSideColumnWidth,
+      @required this.rightHandSideColumnWidth,
+      this.isFixedHeader = false,
+      this.headerWidgets,
+      this.leftSideItemBuilder,
+      this.rightSideItemBuilder,
+      this.itemCount = 0,
+      this.leftSideChildren,
+      this.rightSideChildren,
     this.rowSeparatorWidget = const Divider(
       color: Colors.transparent,
       height: 0.0,
@@ -62,6 +67,7 @@ class HorizontalDataTable extends StatefulWidget {
     this.elevationColor = Colors.black54,
     this.leftHandSideColBackgroundColor = Colors.white,
     this.rightHandSideColBackgroundColor = Colors.white,
+    this.scrollbarStyle = const ScrollbarStyle()
   })  : assert(
             (leftSideChildren == null && leftSideItemBuilder != null) ||
                 (leftSideChildren != null),
@@ -140,14 +146,20 @@ class _HorizontalDataTableState extends State<HorizontalDataTable> {
           left: widget.leftHandSideColumnWidth,
           height: height,
           width: width - widget.leftHandSideColumnWidth,
-          child: SingleChildScrollView(
+          child: Scrollbar(
+            isAlwaysShown: widget.scrollbarStyle?.isAlwaysShown ?? false,
+            radius: widget.scrollbarStyle?.radius,
+            thickness: widget.scrollbarStyle?.thickness,
             controller: _rightHorizontalScrollController,
-            child: Container(
-              color: widget.rightHandSideColBackgroundColor,
-              child: _getRightSideHeaderScrollColumn(),
-              width: widget.rightHandSideColumnWidth,
+            child: SingleChildScrollView(
+              controller: _rightHorizontalScrollController,
+              child: Container(
+                color: widget.rightHandSideColBackgroundColor,
+                child: _getRightSideHeaderScrollColumn(),
+                width: widget.rightHandSideColumnWidth,
+              ),
+              scrollDirection: Axis.horizontal,
             ),
-            scrollDirection: Axis.horizontal,
           ),
         ),
         Positioned(
@@ -404,4 +416,16 @@ class _SyncScrollControllerManager {
       }
     }
   }
+}
+
+///
+/// Fields that from the [Scrollbar] widget,
+/// for easier customize the scrollbar
+class ScrollbarStyle {
+  final bool isAlwaysShown;
+  final double thickness;
+  final Radius radius;
+
+  const ScrollbarStyle(
+      {this.isAlwaysShown = false, this.thickness, this.radius});
 }

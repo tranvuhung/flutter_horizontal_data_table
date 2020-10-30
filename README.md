@@ -26,6 +26,7 @@ HorizontalDataTable(
       this.elevationColor = Colors.black54,
       this.leftHandSideColBackgroundColor = Colors.white,
       this.rightHandSideColBackgroundColor = Colors.white,
+      this.scrollbarStyle: ScrollbarStyle(isAlwaysShown: false, radius: Radius.circular(50), thickness: 10),
       }
      )
       
@@ -40,6 +41,7 @@ HorizontalDataTable(
 5. elevation is the shadow between the header row and the left column when scroll start. Default set to 5.0. If want to disable the shadow, please set to 0.0.
 6. elevationColor is for changing shadow color. This should be useful when using dark table background.
 7. added leftHandSideColBackgroundColor and rightHandSideColBackgroundColor for setting the default background of the back of table. Default is set to white following the Material widget.
+8. (dev) added ScrollbarStyle for the Scrollbar widget. ScrollbarStyle contains isAlwaysShown, radius and thickness options which are the same setting as the original Scrollbar widget. Default the isAlwaysShown is turned off.
  
 ## Example
 

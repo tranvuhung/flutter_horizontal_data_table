@@ -1,3 +1,6 @@
+## [1.0.7-dev] - 20201030
+* Feat: Added Scrollbar widget
+
 ## [1.0.6+3] - 20200925
 * upgraded dependence
 

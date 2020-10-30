@@ -64,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
         rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+        scrollbarStyle: ScrollbarStyle(
+            isAlwaysShown: true, radius: Radius.circular(50), thickness: 10),
       ),
       height: MediaQuery
           .of(context)
