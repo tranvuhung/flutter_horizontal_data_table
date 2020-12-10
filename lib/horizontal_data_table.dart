@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class HorizontalDataTable extends StatefulWidget {
   final double leftHandSideColumnWidth;
   final double rightHandSideColumnWidth;
+  final ScrollController rightHandSideListViewScrollController;
 
   ///if headerWidgets==true,
   ///HorizontalDataTable.headerWidgets[0] as the left hand side header
@@ -46,6 +47,7 @@ class HorizontalDataTable extends StatefulWidget {
   const HorizontalDataTable({
     @required this.leftHandSideColumnWidth,
     @required this.rightHandSideColumnWidth,
+    this.rightHandSideListViewScrollController,
     this.isFixedHeader = false,
     this.headerWidgets,
     this.leftSideItemBuilder,
@@ -84,7 +86,6 @@ class HorizontalDataTable extends StatefulWidget {
 
 class _HorizontalDataTableState extends State<HorizontalDataTable> {
   ScrollController _leftHandSideListViewScrollController = ScrollController();
-  ScrollController _rightHandSideListViewScrollController = ScrollController();
   ScrollController _rightHorizontalScrollController = ScrollController();
   _SyncScrollControllerManager _syncScroller = _SyncScrollControllerManager();
   ScrollShadowModel _scrollShadowModel = ScrollShadowModel();
@@ -95,7 +96,7 @@ class _HorizontalDataTableState extends State<HorizontalDataTable> {
     _syncScroller
         .registerScrollController(_leftHandSideListViewScrollController);
     _syncScroller
-        .registerScrollController(_rightHandSideListViewScrollController);
+        .registerScrollController(widget.rightHandSideListViewScrollController);
     _leftHandSideListViewScrollController.addListener(() {
       _scrollShadowModel.verticalOffset =
           _leftHandSideListViewScrollController.offset;
@@ -112,10 +113,10 @@ class _HorizontalDataTableState extends State<HorizontalDataTable> {
   void dispose() {
     _syncScroller
         .unregisterScrollController(_leftHandSideListViewScrollController);
-    _syncScroller
-        .unregisterScrollController(_rightHandSideListViewScrollController);
+    _syncScroller.unregisterScrollController(
+        widget.rightHandSideListViewScrollController);
     _leftHandSideListViewScrollController.dispose();
-    _rightHandSideListViewScrollController.dispose();
+    widget.rightHandSideListViewScrollController.dispose();
     _rightHorizontalScrollController.dispose();
     super.dispose();
   }
@@ -294,14 +295,14 @@ class _HorizontalDataTableState extends State<HorizontalDataTable> {
       //ListView
       widgetList.add(Expanded(
         child: _getScrollColumn(_getRightHandSideListView(),
-            this._rightHandSideListViewScrollController),
+            this.widget.rightHandSideListViewScrollController),
       ));
       return Column(
         children: widgetList,
       );
     } else {
       return _getScrollColumn(_getRightHandSideListView(),
-          this._rightHandSideListViewScrollController);
+          this.widget.rightHandSideListViewScrollController);
     }
   }
 
@@ -317,7 +318,7 @@ class _HorizontalDataTableState extends State<HorizontalDataTable> {
 
   Widget _getRightHandSideListView() {
     return _getListView(
-        _rightHandSideListViewScrollController,
+        widget.rightHandSideListViewScrollController,
         widget.rightSideItemBuilder,
         widget.itemCount,
         widget.rightSideChildren);
